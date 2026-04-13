@@ -42,6 +42,18 @@ app.use('/api/requests', require('./routes/request'));
 app.use('/api/notifications', require('./routes/notification'));
 app.use('/api/support', require('./routes/support'));
 
+// --- ADD THIS TO SERVE FRONTEND ---
+const path = require('path');
+
+// Serve static files from the React build
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Handle any requests that don't match the API routes by sending back index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+// ----------------------------------
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`[ELITE-BACKEND] Operational on port ${PORT}`);
