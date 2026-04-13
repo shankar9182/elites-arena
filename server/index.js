@@ -48,8 +48,8 @@ const path = require('path');
 // Serve static files from the React build
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// Handle any requests that don't match the API routes by sending back index.html
-app.get('/:any(.*)', (req, res) => {
+// Catch-all: Send any other request to the React app (Must be at the very bottom!)
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 // ----------------------------------
