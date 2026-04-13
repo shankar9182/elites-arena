@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance with base URL for the Elite Arena API
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api', // Absolute URL for consistency with other parts of the app
+    baseURL: '/api', // Use relative path so it works on both local and production (AWS)
     headers: {
         'Content-Type': 'application/json',
     },
