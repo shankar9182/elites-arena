@@ -155,11 +155,19 @@ const PlayerDashboard = () => {
 
     const fetchTournaments = async () => {
         try {
+            console.log("DEBUG: Fetching tournaments...");
             const res = await tournamentAPI.getAll();
-            setTournaments(res.data);
+            console.log("DEBUG: Tournaments received:", res.data);
+            
+            if (Array.isArray(res.data)) {
+                setTournaments(res.data);
+            } else {
+                console.error("DEBUG: Expected array but got:", typeof res.data);
+                setTournaments([]);
+            }
             setLoading(false);
         } catch (error) {
-            console.error("Fetch error:", error);
+            console.error("DEBUG: Fetch error:", error);
             showNotify("CONNECTION FAILURE: OFFLINE MODE", "danger");
             setLoading(false);
         }
@@ -1232,7 +1240,7 @@ const PlayerDashboard = () => {
                                 .filter(t => {
                                     const title = t.title || t.name || '';
                                     const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase());
-                                    const matchesGame = filterGame === 'ALL' || t.game === filterGame;
+                                    const matchesGame = filterGame === 'ALL' || (t.game && t.game.toUpperCase() === filterGame.toUpperCase());
                                     const matchesFee = filterFee === 'ALL' || (filterFee === 'FREE' ? t.entryFee === 0 : t.entryFee > 0);
                                     return matchesSearch && matchesGame && matchesFee;
                                 })
