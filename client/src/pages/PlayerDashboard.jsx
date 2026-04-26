@@ -1,7 +1,7 @@
 import { authAPI, tournamentAPI, requestAPI, notificationAPI, supportAPI } from '../services/api';
 import React, { useState, useEffect, useRef } from 'react';
 import { getAvatarUrl, handleAvatarError, VALID_AVATARS } from '../utils/avatarUtils';
-import axios from 'axios';
+
 import {
     Activity, Trophy, Users, Key, LayoutGrid, Settings,
     Bell, ShieldAlert, Plus, Minus, Search, Filter, Edit2,
@@ -155,10 +155,7 @@ const PlayerDashboard = () => {
 
     const fetchTournaments = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/tournaments', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await tournamentAPI.getAll();
             setTournaments(res.data);
             setLoading(false);
         } catch (error) {
@@ -360,12 +357,9 @@ const PlayerDashboard = () => {
 
     const handleReserveSlot = async (id) => {
         try {
-            const token = localStorage.getItem('token');
             showNotify("RESERVING SLOT... INITIALIZING HANDSHAKE", "info");
             
-            const res = await axios.post(`http://localhost:5000/api/tournaments/${id}/join`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await tournamentAPI.join(id);
 
             showNotify("TACTICAL SLOT SECURED", "success");
             fetchTournaments(); // Refresh data
